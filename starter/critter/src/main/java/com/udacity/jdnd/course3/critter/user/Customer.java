@@ -1,9 +1,11 @@
-package com.udacity.jdnd.course3.critter.entity;
+package com.udacity.jdnd.course3.critter.user;
 
 import java.util.LinkedList;
 import java.util.List;
 
 import org.hibernate.annotations.Nationalized;
+
+import com.udacity.jdnd.course3.critter.pet.Pet;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

@@ -1,4 +1,4 @@
-package com.udacity.jdnd.course3.critter.entity;
+package com.udacity.jdnd.course3.critter.pet;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -6,20 +6,21 @@ import java.util.Set;
 
 import org.hibernate.annotations.Nationalized;
 
-import com.udacity.jdnd.course3.critter.pet.PetType;
+import com.udacity.jdnd.course3.critter.schedule.Schedule;
+import com.udacity.jdnd.course3.critter.user.Customer;
 
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 
 public class Pet {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Nationalized
     private String name;
 
@@ -31,16 +32,10 @@ public class Pet {
     private String notes;
 
     @ManyToOne
-    private Customer customer;
+    private Customer owner;
 
     @ManyToMany
-    @JoinTable(
-
-            name = "schedule_pet",
-            joinColumns = @JoinColumn(name = "pet_id"),
-            inverseJoinColumns = @JoinColumn(name = "schedule_id")
-    )
-    private Set<Schedule> schedules = new HashSet<>();
+    private Set<Schedule> schedule = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -83,21 +78,17 @@ public class Pet {
     }
 
     public Customer getCustomer() {
-        return customer;
+        return owner;
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    public void setCustomer(Customer owner) {
+        this.owner = owner;
     }
 
     public Set<Schedule> getSchedules() {
-        return schedules;
+        return schedule;
     }
-    public void setSchedules(Set<Schedule> schedules) {
-        this.schedules = schedules;
-    }
-
-    public void addSchedule(Schedule schedule) {
-        this.schedules.add(schedule);
+    public void setSchedule(Set<Schedule> schedule) {
+        this.schedule = schedule;
     }
 }
