@@ -3,34 +3,42 @@ package com.udacity.jdnd.course3.critter.pet;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service
-public class PetService {
-    private final PetRepository petRepository;
+import jakarta.transaction.Transactional;
 
+@Service
+@Transactional
+public class PetService {
+    
+    @Autowired
+    PetRepository petRepository;
+
+
+    @Autowired
     public PetService(PetRepository petRepository) {
         this.petRepository = petRepository;
     }
 
-    public Pet savePet(Pet pet) {
-        return petRepository.save(pet);
+    public Optional<Pet> findPetById(long petId) {
+        return petRepository.findById(petId);
     }
 
-    public List<Pet> findAllById(List<Long> petIds) {
+    public List<Pet> findPetsByIds(List<Long> petIds) {
         return petRepository.findAllById(petIds);
     }
 
-    public Optional<Pet> findPetById(Long id) {
-        return petRepository.findById(id);
-    }
-
-    public List<Pet> findPetByOwner(Long ownerId) {
+    public List<Pet> findPetsByOwnerId(long ownerId) {
         return petRepository.findByOwnerId(ownerId);
     }
 
     public List<Pet> findAllPets() {
         return petRepository.findAll();
+    }
+
+    public Pet save(Pet pet, long ownerId) {
+        return petRepository.save(pet);
     }
 
 }

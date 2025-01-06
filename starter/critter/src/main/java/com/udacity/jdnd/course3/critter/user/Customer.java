@@ -1,32 +1,49 @@
 package com.udacity.jdnd.course3.critter.user;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Set;
 
 import org.hibernate.annotations.Nationalized;
 
 import com.udacity.jdnd.course3.critter.pet.Pet;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "customer_tab")
 public class Customer {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "customer_id")
     private Long id;
 
     @Nationalized
+    @Column(name = "customer_name")
     private String name;
+
+    @Column(name = "customer_phone")
     private String phoneNumber;
+
+    @Column(name = "customer_notes", length=2500)
     private String notes;
 
-    @OneToMany(mappedBy = "customer")
-    private List<Pet> pets = new LinkedList<>();
+    @OneToMany
+    private Set<Pet> pets;
 
+    public Customer() {}
+
+    public Customer(String name, String phoneNumber, String notes, Set<Pet> pets) {
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.notes = notes;
+        this.pets = pets;
+    }
 
     public Long getId() {
         return id;
@@ -60,11 +77,11 @@ public class Customer {
         this.notes = notes;
     }
 
-    public List<Pet> getPets() {
+    public Set<Pet> getPets() {
         return pets;
     }
 
-    public void setPets(List<Pet> pets) {
+    public void setPets(Set<Pet> pets) {
         this.pets = pets;
     }
 

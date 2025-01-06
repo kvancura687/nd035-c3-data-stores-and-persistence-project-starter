@@ -4,29 +4,47 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
+import com.udacity.jdnd.course3.critter.pet.Pet;
 import com.udacity.jdnd.course3.critter.user.Employee;
 import com.udacity.jdnd.course3.critter.user.EmployeeSkill;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "schedule_tab")
 public class Schedule {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "schedule_id")
     private Long id;
+
     @ManyToMany
-    private List<Employee> employees;
+    private Set<Employee> employees;
     private List<Long> employeeIds;
-    private List<Long> petIds;
+
+    @ManyToMany
+    private Set<Pet> pets;
+    private Set<Long> petIds;
     private LocalDate date;
 
     @Enumerated
     private Set<EmployeeSkill> activities;
+
+    public Schedule() {}
+
+    public Schedule(Set<Employee> employees, Set<Pet> pets, LocalDate date, Set<EmployeeSkill> activities) {
+        this.employees = employees;
+        this.pets = pets;
+        this.date = date;
+        this.activities = activities;
+    }
 
     public long getId(){
         return id;
@@ -36,11 +54,11 @@ public class Schedule {
         this.id = id;
     }
 
-    public List<Employee> getEmployees() {
+    public Set<Employee> getEmployees() {
         return employees;
     }
 
-    public void setEmployees(List<Employee> employees) {
+    public void setEmployees(Set<Employee> employees) {
         this.employees = employees;
     }
     
@@ -52,11 +70,19 @@ public class Schedule {
         this.employeeIds = employeeIds;
     }
 
-    public List<Long> getPetIds() {
+    public Set<Pet> getPets() {
+        return pets;
+    }
+
+    public void setPets(Set<Pet> pets) {
+        this.pets = pets;
+    }
+
+    public Set<Long> getPetIds() {
         return petIds;
     }
 
-    public void setPetIds(List<Long> petIds) {
+    public void setPetIds(Set<Long> petIds) {
         this.petIds = petIds;
     }
 

@@ -9,33 +9,54 @@ import org.hibernate.annotations.Nationalized;
 import com.udacity.jdnd.course3.critter.schedule.Schedule;
 import com.udacity.jdnd.course3.critter.user.Customer;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
+@Entity
+@Table(name = "pets_tab")
 public class Pet {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "pet_id")
     private Long id;
 
     @Nationalized
+    @Column(name = "pet_name")
     private String name;
 
     @Enumerated
+    @Column(name = "pet_type")
     private PetType type;
 
+    @Column(name = "pet_birthDate")
     private LocalDate birthDate;
 
+    @Column(name = "pet_notes", length=2500)
     private String notes;
 
     @ManyToOne
+    @Column(name = "pet_owner")
     private Customer owner;
 
     @ManyToMany
     private Set<Schedule> schedule = new HashSet<>();
+
+    public Pet() {}
+
+    public Pet(String name, PetType type, LocalDate birthDate, String notes, Customer owner) {
+        this.name = name;
+        this.type = type;
+        this.birthDate = birthDate;
+        this.notes = notes;
+        this.owner = owner;
+    }
 
     public Long getId() {
         return id;
