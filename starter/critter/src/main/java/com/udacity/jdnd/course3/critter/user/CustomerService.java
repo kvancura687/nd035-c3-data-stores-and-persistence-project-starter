@@ -15,14 +15,11 @@ import jakarta.transaction.Transactional;
 @Service
 @Transactional
 public class CustomerService {
-    private final CustomerRepository customerRepository;
-    private final PetRepository petRepository;
+    @Autowired
+    CustomerRepository customerRepository;
 
     @Autowired
-    public CustomerService(CustomerRepository customerRepository, PetRepository petRepository) {
-        this.customerRepository = customerRepository;
-        this.petRepository = petRepository;
-    }
+    PetRepository petRepository;
 
     public Optional<Customer> findCustomer(Long id) {
         return customerRepository.findById(id);

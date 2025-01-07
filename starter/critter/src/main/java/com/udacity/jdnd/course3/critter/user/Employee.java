@@ -5,24 +5,19 @@ import java.util.Set;
 
 import org.hibernate.annotations.Nationalized;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "employee_tab")
 public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "emp_id")
     private long id;
 
     @Nationalized
-    @Column(name = "emp_name")
     private String name;
 
     @Enumerated
@@ -36,6 +31,12 @@ public class Employee {
         this.name = name;
         this.skills = skills;
         this.daysAvailable = daysAvailable;
+    }
+
+    public Employee(EmployeeDTO employeeDTO) {
+        this.name = employeeDTO.getName();
+        this.skills = employeeDTO.getSkills();
+        this.daysAvailable = employeeDTO.getDaysAvailable();
     }
 
     public long getId() {

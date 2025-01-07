@@ -11,12 +11,8 @@ import jakarta.transaction.Transactional;
 @Transactional
 public class ScheduleService {
 
-    private final ScheduleRepository scheduleRepository;
-
     @Autowired
-    public ScheduleService(ScheduleRepository scheduleRepository) {
-        this.scheduleRepository = scheduleRepository;
-    }
+    ScheduleRepository scheduleRepository;
 
     public Schedule save(Schedule schedule) {
         return scheduleRepository.save(schedule);
@@ -26,16 +22,16 @@ public class ScheduleService {
         return scheduleRepository.findAll();
     }
 
-    public List<Schedule> findSchedulesByPetId(long petId) {
-        return scheduleRepository.findSchedulesByPetId(petId);
+    public List<Schedule> findSchedulesByPetId(long petIds) {
+        return scheduleRepository.findAllByPetsId(petIds);
     }
 
     public List<Schedule> findSchedulesByEmployeeId(long employeeId) {
-        return scheduleRepository.findSchedulesByEmployeeId(employeeId);
+        return scheduleRepository.findAllByEmployeesId(employeeId);
     }
 
     public List<Schedule> findSchedulesByCustomerId(long customerId) {
-        return scheduleRepository.findSchedulesByCustomerId(customerId);
+        return scheduleRepository.findAllByPetsOwnerId(customerId);
     }
 
 }

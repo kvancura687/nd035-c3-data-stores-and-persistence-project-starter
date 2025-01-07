@@ -1,6 +1,7 @@
 package com.udacity.jdnd.course3.critter.user;
 
 import java.time.DayOfWeek;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -23,8 +24,10 @@ import jakarta.persistence.EntityNotFoundException;
 /**
  * Handles web requests related to Users.
  *
- * Includes requests for both customers and employees. Splitting this into separate user and customer controllers
- * would be fine too, though that is not part of the required scope for this class.
+ * Includes requests for both customers and employees. Splitting this into
+ * separate user and customer controllers
+ * would be fine too, though that is not part of the required scope for this
+ * class.
  */
 @RestController
 @RequestMapping("/user")
@@ -41,14 +44,21 @@ public class UserController {
 
     // Reusable CustomerDTO mapper
     private CustomerDTO mapToCustomerDTO(Customer customer) {
-    CustomerDTO customerDTO = new CustomerDTO();
-    BeanUtils.copyProperties(customer, customerDTO);
-    customerDTO.setPetIds(
-        customer.getPets().stream()
-                .map(Pet::getId)
-                .collect(Collectors.toList())
-    );
-    return customerDTO;
+        CustomerDTO customerDTO = new CustomerDTO();
+        if (customer != null) {
+            customerDTO.setId(customer.getId());
+            customerDTO.setName(customer.getName());
+            customerDTO.setPhoneNumber(customer.getPhoneNumber());
+            customerDTO.setNotes(customer.getNotes());
+        }
+        if (customer != null && customer.getPets() != null) {
+            List<Long> petIds = new ArrayList<>();
+            for (Pet pet : customer.getPets()) {
+                petIds.add(pet.getId());
+            }
+            customerDTO.setPetIds(petIds);
+        }
+        return customerDTO;
     }
 
     @PostMapping("/customer")
@@ -75,7 +85,7 @@ public class UserController {
         return mapToCustomerDTO(owner);
     }
 
-    //Reusable EmployeeDTO mapper
+    // Reusable EmployeeDTO mapper
     private EmployeeDTO mapToEmployeeDTO(Employee employee) {
         EmployeeDTO employeeDTO = new EmployeeDTO();
         BeanUtils.copyProperties(employee, employeeDTO);
@@ -108,9 +118,8 @@ public class UserController {
     @GetMapping("/employee/availability")
     public List<EmployeeDTO> findEmployeesForService(@RequestBody EmployeeRequestDTO employeeDTO) {
         List<Employee> employees = employeeService.findEmployeesForService(
-                employeeDTO.getDaysAvailable(), 
-                employeeDTO.getSkills()
-        );
+                employeeDTO.getDaysAvailable(),
+                employeeDTO.getSkills());
         return employees.stream()
                 .map(this::mapToEmployeeDTO)
                 .collect(Collectors.toList());
